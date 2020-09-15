@@ -37,7 +37,8 @@ def get_random_seats():
         else:
 
             opposite = [boys.pop(0), girls.pop(0)]
-            print(people[opposite[0]], people[opposite[1]], 'opposite')  # 男女同桌公开处刑
+            print('男女同桌', people[opposite[0]], people[opposite[1]])  # 男女同桌公开处刑
+            print()
             random.shuffle(opposite)
             result.append(opposite)
 
@@ -59,3 +60,4 @@ def print_seats(seats):
 
 
 print_seats(get_random_seats())
+input()
