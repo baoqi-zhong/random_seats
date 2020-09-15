@@ -1,5 +1,7 @@
 # coding:utf-8
 import random
+from tkinter import *
+import time
 
 people = {1: '陈俊宇', 2: '陈铭隽', 3: '陈奕纶', 4: '邓历新', 5: '何启荣', 6: '黄炜钊', 7: '黄烨锋', 8: '黄钊华', 9: '李  可', 10: '李铭轩', 11: '李志翔', 12: '李宗轩', 13: '练浩诚', 14: '梁俊文', 15: '梁宇轩', 16: '林子尧', 18: '韦睿行', 19: '冼飘虹', 20: '许  航', 21: '叶孝轩', 22: '张  乐', 23: '郑  超', 24: '钟梓洋', 25: '朱信华', 26: '邹佳洵', 27: '陈楚原', 28: '陈隽欣', 29: '陈沛怡', 30: '陈易沛', 31: '陈钰甄', 32: '范海瑶', 33: '冯琬乔', 34: '何恩希', 35: '何文静', 36: '何宗阳', 37: '黄逸帆', 38: '黎晋旭', 39: '李烨彤', 40: '梁楚清', 41: '梁子怡', 42: '林雨涵', 43: '罗思薇', 44: '马麒越', 45: '邱  童', 46: '石粤礽', 47: '汪雨桐', 48: '谢砚琪', 49: '许艺馨', 50: '杨梓馨', 51: '詹  岚', 52: '张嘉宁', 53: '周熙临', 54: '朱怡晨', 55: '左芷溪'}
 
@@ -58,6 +60,25 @@ def print_seats(seats):
                 print('|'+people[pair[0]]+' '+people[pair[1]], end='')
         print('|')
 
+def click():
+    print('click')
 
-print_seats(get_random_seats())
-input()
+def get_label_place(x, y):
+    print(x,y)
+
+get_label_place(8)
+#print_seats(get_random_seats())
+#input()
+
+window = Tk()
+window.title('random_seats')
+window.geometry('430x300+300+200')
+window.configure(background='#D5FDF8')
+
+
+start = Button(text = 'start', command = click)
+start.place(x=10, y=10, width = 60, height = 30)
+
+label = [[Label(text = '??', relief='groove')]*7]*8 # [y][x]
+label[0].place(x=10, y=50, width=60, height=40)
+window.mainloop()
