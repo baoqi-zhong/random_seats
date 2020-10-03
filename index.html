@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CLASS-6 随机座位安排</title>
+	<style>
+		td {
+			width: 9.09%;
+			height: 50px;
+			text-align: center;
+		}
+
+		.tdBg {
+			background-color: pink;
+		}
+		.button {
+            color: #FFFFFF;
+            background-color: #1B9AF7;
+            border-color: #4cb0f9;
+            font-weight: 300;
+            font-size: 16px;
+            border-radius: 8px;
+            text-align: center;
+            line-height: 40px;
+            height: 40px;
+            padding: 0 40px;
+            margin: 0;
+            display: inline-block;
+            appearance: none;
+            cursor: pointer;
+            border: none;
+        }
+        body{
+            /* 加载背景图片 */
+            background-image: url("bg.png");
+
+            /* 背景图垂直、水平均居中 */
+            background-position: center center;
+            /* 背景图不平铺 */
+            background-repeat: no-repeat;
+            /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
+            background-attachment: fixed;  /*此条属性必须设置否则可能无效*/
+            /* 让背景图基于容器大小伸缩 */
+            background-size: cover;
+			}
+	</style>
+
+	<script>
+	    var boys;
+	    var girls;
+	    var result;
+	    var seat_sex;
+	    var sex;
+	    var opposite;
+	    var timer;
+
+
+	    var names = {1: '陈俊宇', 2: '陈铭隽', 3: '陈奕纶', 4: '邓历新', 5: '何启荣', 6: '黄炜钊', 7: '黄烨锋', 8: '黄钊华', 9: '李可', 10: '李铭轩', 11: '李志翔', 12: '李宗轩', 13: '练浩诚', 14: '梁俊文', 15: '梁宇轩', 16: '林子尧', 18: '韦睿行', 19: '冼飘虹', 20: '许航', 21: '叶孝轩', 22: '张乐', 23: '郑超', 24: '钟梓洋', 25: '朱信华', 26: '邹佳洵', 27: '陈楚原', 28: '陈隽欣', 29: '陈沛怡', 30: '陈易沛', 31: '陈钰甄', 32: '范海瑶', 33: '冯琬乔', 34: '何恩希', 35: '何文静', 36: '何宗阳', 37: '黄逸帆', 38: '黎晋旭', 39: '李烨彤', 40: '梁楚清', 41: '梁子怡', 42: '林雨涵', 43: '罗思薇', 44: '马麒越', 45: '邱童', 46: '石粤礽', 47: '汪雨桐', 48: '谢砚琪', 49: '许艺馨', 50: '杨梓馨', 51: '詹岚', 52: '张嘉宁', 53: '周熙临', 54: '朱怡晨', 55: '左芷溪', 56: ' '};
+
+        var seats;
+        function get_random_seats(){
+            boys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26];  // 25 人
+            girls = [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55];
+            boys.sort(() => {return Math.round(Math.random()) - 0.5});
+            girls.sort(() => {return Math.round(Math.random()) - 0.5});
+
+            // 确定每对同桌性别
+            result = [];
+            seat_sex = (new Array(Math.floor(boys.length/2))).fill(0).concat((new Array(Math.floor(girls.length/2))).fill(1));
+            seat_sex.push([0.5]);
+            seat_sex.sort(() => {return Math.round(Math.random()) - 0.5});
+
+            while(seat_sex.length>0){
+                sex = seat_sex.pop();
+                if (sex==0){
+                result = result.concat([boys.pop(), boys.pop()]);
+                }
+                if (sex==1){
+                result = result.concat([girls.pop(), girls.pop()]);
+                }
+                if (sex==0.5){
+                opposite = [boys.pop(), girls.pop()];
+                opposite.sort(() => {return Math.round(Math.random()) - 0.5});
+                result = result.concat(opposite);
+                }
+            }
+            result = result.concat([56,56]);
+            return result;
+
+
+        }
+
+		function start(){
+		    timer = setInterval(function(){
+                seats = get_random_seats();
+                var allTd = document.getElementsByClassName("stu");
+                for (var i=0; i<allTd.length; i++) {
+                    allTd[allTd.length-i-1].innerText = names[seats[i]];
+                    if(seats[i]==opposite[0]){
+                        allTd[allTd.length-i-1].className = "tdBg stu";
+                        opposite[0] = opposite[1];
+                    }
+                    else{
+                        allTd[allTd.length-i-1].className = "stu";
+                    }
+                }
+            }, 50);
+		}
+
+		function end(){
+			clearInterval(timer);
+		}
+
+	</script>
+</head>
+<body>
+
+	<!-- table是表格标签，tr表示一行，td表示一行中的一个单元格 -->
+	<!-- 默认情况，单元格会根据内容的长度比例来自动设置 -->
+    <center>
+    <h1>6班座位安排！</h1>
+	<table border="1" width="1000">
+		<tr>
+		<!-- 可以对单元格施加宽度属性，使用百分比和长度皆可 -->
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td rowspan="7">走<br>廊</td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td rowspan="7">走<br>廊</td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td rowspan="7">走<br>廊</td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+        </tr>
+
+		<tr>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+		</tr>
+
+		<tr>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+		</tr>
+
+		<tr>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+        </tr>
+
+        <tr>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+		</tr>
+
+        <tr>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+		</tr>
+
+        <tr>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+            <td class="stu"></td>
+		</tr>
+
+		<tr>
+			<!-- colspan 可以跨列 -->
+			<td colspan="11">讲台</td>
+		</tr>
+
+	</table>
+
+	<br><br>
+	<input type="button" value="开始" class="button" onclick="start()">
+	<input type="button" value="结束" class="button" onclick="end()">
+    </center>
+
+</body>
+</html>

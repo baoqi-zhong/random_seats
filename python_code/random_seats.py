@@ -19,6 +19,7 @@ def get_random_seats():
     boys = list(range(1, 27))
     boys.remove(17)
     girls = list(range(27, 56))
+    print(str(girls))
     random.shuffle(boys)
     random.shuffle(girls)
 
@@ -60,25 +61,8 @@ def print_seats(seats):
                 print('|'+people[pair[0]]+' '+people[pair[1]], end='')
         print('|')
 
-def click():
-    print('click')
-
-def get_label_place(x, y):
-    print(x,y)
-
-get_label_place(8)
-#print_seats(get_random_seats())
-#input()
-
-window = Tk()
-window.title('random_seats')
-window.geometry('430x300+300+200')
-window.configure(background='#D5FDF8')
 
 
-start = Button(text = 'start', command = click)
-start.place(x=10, y=10, width = 60, height = 30)
+print_seats(get_random_seats())
+input()
 
-label = [[Label(text = '??', relief='groove')]*7]*8 # [y][x]
-label[0].place(x=10, y=50, width=60, height=40)
-window.mainloop()
