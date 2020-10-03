@@ -66,9 +66,11 @@
 
             // 确定每对同桌性别
             result = [];
-            seat_sex = (new Array(Math.floor(boys.length/2))).fill(0).concat((new Array(Math.floor(girls.length/2))).fill(1));
-            seat_sex.push([0.5]);
-            seat_sex.sort(() => {return Math.round(Math.random()) - 0.5});
+            //seat_sex = (new Array(Math.floor(boys.length/2))).fill(0).concat((new Array(Math.floor(girls.length/2))).fill(1));
+            //seat_sex.push([0.5]);
+            //alert(seat_sex)
+            //seat_sex.sort(() => {return Math.round(Math.random()) - 0.5});
+            seat_sex = [1,1,1,1, 0,1,0,1, 1,0,1,0, 0,0.5,1,1, 1,1,0,0, 1,0,1,0, 0,0,0]
 
             while(seat_sex.length>0){
                 sex = seat_sex.pop();
