@@ -53,6 +53,7 @@
 	    var sex;
 	    var opposite;
 	    var timer;
+	    var started=0;
 
 
 	    var names = {1: '陈俊宇', 2: '陈铭隽', 3: '陈奕纶', 4: '邓历新', 5: '何启荣', 6: '黄炜钊', 7: '黄烨锋', 8: '黄钊华', 9: '李可', 10: '李铭轩', 11: '李志翔', 12: '李宗轩', 13: '练浩诚', 14: '梁俊文', 15: '梁宇轩', 16: '林子尧', 18: '韦睿行', 19: '冼飘虹', 20: '许航', 21: '叶孝轩', 22: '张乐', 23: '郑超', 24: '钟梓洋', 25: '朱信华', 26: '邹佳洵', 27: '陈楚原', 28: '陈隽欣', 29: '陈沛怡', 30: '陈易沛', 31: '陈钰甄', 32: '范海瑶', 33: '冯琬乔', 34: '何恩希', 35: '何文静', 36: '何宗阳', 37: '黄逸帆', 38: '黎晋旭', 39: '李烨彤', 40: '梁楚清', 41: '梁子怡', 42: '林雨涵', 43: '罗思薇', 44: '马麒越', 45: '邱童', 46: '石粤礽', 47: '汪雨桐', 48: '谢砚琪', 49: '许艺馨', 50: '杨梓馨', 51: '詹岚', 52: '张嘉宁', 53: '周熙临', 54: '朱怡晨', 55: '左芷溪', 56: ' '};
@@ -94,25 +95,84 @@
         }
 
 		function start(){
-		    timer = setInterval(function(){
-                seats = get_random_seats();
-                var allTd = document.getElementsByClassName("stu");
-                for (var i=0; i<allTd.length; i++) {
-                    allTd[allTd.length-i-1].innerText = names[seats[i]];
-                    if(seats[i]==opposite[0]){
-                        allTd[allTd.length-i-1].className = "tdBg stu";
-                        opposite[0] = opposite[1];
+		    if (started==0){
+                started = 1;
+                timer = setInterval(function(){
+                    seats = get_random_seats();
+                    var allTd = document.getElementsByClassName("stu");
+                    for (var i=0; i<allTd.length; i++) {
+                        allTd[allTd.length-i-1].innerText = names[seats[i]];
+                        if(seats[i]==opposite[0]){
+                            allTd[allTd.length-i-1].className = "tdBg stu";
+                            opposite[0] = opposite[1];
+                        }
+                        else{
+                            allTd[allTd.length-i-1].className = "stu";
+                        }
                     }
-                    else{
-                        allTd[allTd.length-i-1].className = "stu";
-                    }
-                }
-            }, 50);
+                }, 50);
+            }
 		}
 
 		function end(){
-			clearInterval(timer);
+		    if (started==1){
+		        started = 0;
+			    clearInterval(timer);
+			    download();
+			}
 		}
+
+		function download(){
+
+            var oHtml = document.getElementsByClassName('main_table')[0].outerHTML;
+            // 这里将table和style组成一个html，使用模板字符串
+            var excelHtml = `
+                <html>
+                    <head>
+                        <meta charset='utf-8' />
+                        <style>
+                            .main_table.title{
+                                height: 50px;
+                                font-size: 24px;
+                                font-family: '微软雅黑';
+                                font-weight: 700;
+                            }
+                            .main_table td {
+                                padding: 0 40px;
+                                height: 40px;
+                                text-align: center;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${oHtml}
+                    </body>
+                </html>
+            `;
+             // 生成xls文件并通过a标签下载到本地
+
+             // 生成Excel
+             var excelBlob = new Blob([excelHtml], {
+               type: 'application/vnd.ms-excel'
+             })
+
+
+            var oA = document.createElement('a');
+            var ls = URL.createObjectURL(excelBlob);
+            // 利用URL.createObjectURL()方法为a元素生成blob URL
+
+            oA.href = ls;
+            // 给文件命名
+            oA.download = '学生名单.xls';
+            oA.innerHTML = "下载Excel"
+
+            if (document.getElementById('insert').childNodes.length > 0){
+                document.getElementById('insert').removeChild(document.getElementById('insert').childNodes[0]);
+            }
+            document.getElementById('insert').append(oA);
+
+		}
+
 
 	</script>
 </head>
@@ -121,99 +181,101 @@
 	<!-- table是表格标签，tr表示一行，td表示一行中的一个单元格 -->
 	<!-- 默认情况，单元格会根据内容的长度比例来自动设置 -->
     <center>
-    <h1>6班座位安排！</h1>
-	<table border="1" width="1000">
-		<tr>
-		<!-- 可以对单元格施加宽度属性，使用百分比和长度皆可 -->
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td rowspan="7">走<br>廊</td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td rowspan="7">走<br>廊</td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td rowspan="7">走<br>廊</td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-        </tr>
+        <h1>6班座位安排！</h1>
+        <table border="1" width="1000" class="main_table">
+            <tr>
+            <!-- 可以对单元格施加宽度属性，使用百分比和长度皆可 -->
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td rowspan="7">走<br>廊</td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td rowspan="7">走<br>廊</td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td rowspan="7">走<br>廊</td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+            </tr>
 
-		<tr>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-		</tr>
+            <tr>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+            </tr>
 
-		<tr>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-		</tr>
+            <tr>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+            </tr>
 
-		<tr>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-        </tr>
+            <tr>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+            </tr>
 
-        <tr>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-		</tr>
+            <tr>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+            </tr>
 
-        <tr>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-		</tr>
+            <tr>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+            </tr>
 
-        <tr>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-            <td class="stu"></td>
-		</tr>
+            <tr>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+            </tr>
 
-		<tr>
-			<!-- colspan 可以跨列 -->
-			<td colspan="11">讲台</td>
-		</tr>
+            <tr>
+                <!-- colspan 可以跨列 -->
+                <td colspan="11">讲台</td>
+            </tr>
 
-	</table>
+        </table>
 
-	<br><br>
-	<input type="button" value="开始" class="button" onclick="start()">
-	<input type="button" value="结束" class="button" onclick="end()">
+        <br><br>
+
+	    <input type="button" value="开始" class="button" onclick="start()">
+	    <input type="button" value="结束" class="button" onclick="end()">
+        <p id="insert"></p>
     </center>
 
 </body>
