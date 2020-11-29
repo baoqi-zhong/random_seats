@@ -1,17 +1,25 @@
-# 自动座位安排 \﻿ (•◡•) /
+# 6班座位安排 \﻿ (•◡•) /
 
 [![Author_page](https://img.shields.io/badge/Author%20page-on%20bilibili-green)](https://space.bilibili.com/290472819)
 
-基于python的座位安排程序
+基于python、js的座位安排程序
 > 偷偷说一声6班牛啤 (>▽<)
+##  添加了网页版 \﻿ (•◡•) /   https://baoqi.js.org/random_seats
+
+
 ## 功能
-  - 座位安排完全随机
+  - 学习小组位置随机，组内座位安排随机
   - 格式化输出座位表
-  - 男女同桌查找
+  - 支持座位表Excel下载
+  - ~~座位安排完全随机~~
+  - ~~男女同桌查找~~
+  > 学习小组版本(v3.0)已改变该功能，座位将按照学习小组名单进行组内随机安排。男女同桌不做限制。
   
 ## 运行
-  - 在python3环境下，运行random_seats.py
+  - 在python3环境下，运行./python_code/random_seats.py
   - 无需外部库
+  - 打开 https://baoqi.js.org/random_seats 可使用在线版
+
 
 ---
 
@@ -25,6 +33,9 @@
     
     version 2.0  -2020.10.3
     添加了网页版，移动了代码
+    
+    version 3.0  -2020.11.29
+    改成学习小组模式，增加座位安排规范
 
 
 ## 关于代码使用的相关声明
