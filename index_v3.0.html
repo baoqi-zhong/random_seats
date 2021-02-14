@@ -56,8 +56,6 @@
 	    var timer;
 	    var started=0;
 
-	    var times = [0,0,0,0,0,0,0,0,0];
-
         team_seats = {0: '0 1 2 3 4 5'.split(' '),
                       1: '8 9 16 17 24 25'.split(' '),
                       2: '10 11 18 19 26 27'.split(' '),
@@ -80,32 +78,14 @@
 
 	    var names = {1: '陈俊宇', 2: '陈铭隽', 3: '陈奕纶', 4: '邓历新', 5: '何启荣', 6: '黄炜钊', 7: '黄烨锋', 8: '黄钊华', 9: '李可', 10: '李铭轩', 11: '李志翔', 12: '李宗轩', 13: '练浩诚', 14: '梁俊文', 15: '梁宇轩', 16: '林子尧', 18: '韦睿行', 19: '冼飘虹', 20: '许航', 21: '叶孝轩', 22: '张乐', 23: '郑超', 24: '钟梓洋', 25: '朱信华', 26: '邹佳洵', 27: '陈楚原', 28: '陈隽欣', 29: '陈沛怡', 30: '陈易沛', 31: '陈钰甄', 32: '范海瑶', 33: '冯琬乔', 34: '何恩希', 35: '何文静', 36: '何宗阳', 37: '黄逸帆', 38: '黎晋旭', 39: '李烨彤', 40: '梁楚清', 41: '梁子怡', 42: '林雨涵', 43: '罗思薇', 44: '马麒越', 45: '邱童', 46: '石粤礽', 47: '汪雨桐', 48: '谢砚琪', 49: '许艺馨', 50: '杨梓馨', 51: '詹岚', 52: '张嘉宁', 53: '周熙临', 54: '朱怡晨', 55: '左芷溪', 56: ' '};
 
-        function randArr(arr) {
-            for (var i = 0; i < arr.length; i++) {
-                var iRand = parseInt(arr.length * Math.random());
-                var temp = arr[i];
-                arr[i] = arr[iRand];
-                arr[iRand] = temp;
-            }
-            return arr;
-        }
 
         function get_random_seats(){
-            groups = randArr([0,1,2,3,4,5,6,7,8]);
-            <!--for(var find_groop=0;find_groop<9;find_groop++)-->
-            <!--{-->
-                <!--if(groups[find_groop]==0)-->
-                <!--{-->
-                    <!--times[find_groop] = times[find_groop] + 1;-->
-                <!--}-->
-            <!--}-->
-            <!--console.log(times);-->
-            <!--console.log(groups);-->
-
+            groups = [0,1,2,3,4,5,6,7,8];
+            groups.sort(() => {return Math.round(Math.random()) - 0.5});
             result = new Array(54).fill(0);
 
             for (var group=0; group<groups.length; group++) {
-                team_member[group] = randArr(team_member[group]);
+                team_member[group].sort(() => {return Math.round(Math.random()) - 0.5});
                 for (var i=0; i<6; i++) {
                     result[~~team_seats[group][i]] = ~~team_member[groups[group]][i];
                 };
@@ -114,47 +94,15 @@
 
         }
 
-        function isInArray(arr,value){
-            for(var i = 0; i < arr.length; i++){
-                if(value === arr[i]){
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        <!--function debug()-->
-        <!--{-->
-
-            <!--console.log(times);-->
-            <!--var arr  = [24, 23, 40, 52, 11, 12];-->
-            <!--var allTd = document.getElementsByClassName("stu");-->
-            <!--for(var k = 0; k < seats.length; k++){-->
-            <!--var test=0;-->
-                <!--for(var j = 0; j < arr.length; j++){-->
-                    <!--if(seats[k] == arr[j]){-->
-                        <!--test = 1;-->
-                    <!--}-->
-                <!--}-->
-                <!--if(test==1){-->
-                    <!--allTd[allTd.length-k-1].className = "tdBg stu";-->
-                <!--}-->
-                <!--else{-->
-                    <!--allTd[allTd.length-k-1].className = "stu";-->
-                <!--}-->
-            <!--}-->
-        <!--}-->
-
 		function start(){
 		    if (started==0){
                 started = 1;
                 timer = setInterval(function(){
                     seats = get_random_seats();
 
-                    <!--debug();-->
-
                     var allTd = document.getElementsByClassName("stu");
                     for (var i=0; i<allTd.length; i++) {
+
                         allTd[allTd.length-i-1].innerText = names[seats[i]];
                     }
 
@@ -173,6 +121,7 @@
 		function download(){
 
             var oHtml = document.getElementsByClassName('main_table')[0].outerHTML;
+            // 这里将table和style组成一个html，使用模板字符串
             var excelHtml = `
                 <html>
                     <head>
@@ -209,6 +158,7 @@
             // 利用URL.createObjectURL()方法为a元素生成blob URL
 
             oA.href = ls;
+            // 给文件命名
             oA.download = '座位表.xls';
             oA.innerHTML = "下载Excel"
 
