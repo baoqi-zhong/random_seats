@@ -48,14 +48,37 @@
 	<script>
 
 	    var result;
+	    var team_seats;
+	    var team_member;
+	    var group;
+	    var groups;
 
 	    var timer;
 	    var started=0;
 
 	    var times = [0,0,0,0,0,0,0,0,0];
 
+        team_seats = {0: '0 1 2 3 4 5'.split(' '),
+                      1: '8 9 16 17 24 25'.split(' '),
+                      2: '10 11 18 19 26 27'.split(' '),
+                      3: '12 13 20 21 28 29'.split(' '),
+                      4: '32 33 40 41 48 49'.split(' '),
+                      5: '34 35 42 43 50 51'.split(' '),
+                      6: '36 37 44 45 52 53'.split(' '),
+                      7: '6 7 14 15 22 23'.split(' '),
+                      8: '30 31 38 39 46 47'.split(' ')};
 
-	    var names = {1: '陈俊宇', 2: '陈铭隽', 3: '陈奕纶', 4: '崔茗扬', 5: '段明昊', 6: '冯梓健', 7: '郭祉舆', 8: '黄本坤', 9: '黄  昊', 10: '黄炜钊', 11: '黄钊华', 12: '江晓峰', 13: '雷颜玮', 14: '李国恒', 15: '李  可', 16: '李元星', 17: '李卓涛', 18: '李宗轩', 19: '练浩诚', 20: '梁俊文', 21: '梁宇轩', 22: '林子尧', 23: '刘嘉俊', 24: '宋亦非', 25: '谭钧钰', 26: '唐宏凯', 27: '王子扬', 28: '韦睿行', 29: '吴嘉浩', 30: '冼飘虹', 31: '许  航', 32: '叶孝轩', 33: '叶宇桐', 34: '郑  超', 35: '钟梓洋', 36: '周蒋麟', 37: '邹佳洵', 38: '曾子晴', 39: '陈楚原', 40: '陈沛怡', 41: '梁楚清', 42: '罗思薇', 43: '谢砚琪', 44: '詹  岚', 45: '周熙临', 46: '邹梓晴', 47: '邱童', 48: ''};
+        team_member = {0: '24 23 40 52 11 12'.split(' '),
+              1: '45 29 4 8 26 25'.split(' '),
+              2: '51 31 50 42 30 48'.split(' '),
+              3: '46 36 38 34 28 33'.split(' '),
+              4: '43 39 44 3 9 6'.split(' '),
+              5: '10 18 21 32 55 35'.split(' '),
+              6: '1 15 41 54 2 53'.split(' '),
+              7: '16 49 14 5 7 19'.split(' '),
+              8: '47 37 13 27 22 20'.split(' ')};
+
+	    var names = {1: '陈俊宇', 2: '陈铭隽', 3: '陈奕纶', 4: '邓历新', 5: '何启荣', 6: '黄炜钊', 7: '黄烨锋', 8: '黄钊华', 9: '李可', 10: '李铭轩', 11: '李志翔', 12: '李宗轩', 13: '练浩诚', 14: '梁俊文', 15: '梁宇轩', 16: '林子尧', 18: '韦睿行', 19: '冼飘虹', 20: '许航', 21: '叶孝轩', 22: '张乐', 23: '郑超', 24: '钟梓洋', 25: '朱信华', 26: '邹佳洵', 27: '陈楚原', 28: '陈隽欣', 29: '陈沛怡', 30: '陈易沛', 31: '陈钰甄', 32: '范海瑶', 33: '冯琬乔', 34: '何恩希', 35: '何文静', 36: '何宗阳', 37: '黄逸帆', 38: '黎晋旭', 39: '李烨彤', 40: '梁楚清', 41: '梁子怡', 42: '林雨涵', 43: '罗思薇', 44: '马麒越', 45: '邱童', 46: '石粤礽', 47: '汪雨桐', 48: '谢砚琪', 49: '许艺馨', 50: '杨梓馨', 51: '詹岚', 52: '张嘉宁', 53: '周熙临', 54: '朱怡晨', 55: '左芷溪', 56: ' '};
 
         function randArr(arr) {
             for (var i = 0; i < arr.length; i++) {
@@ -68,25 +91,68 @@
         }
 
         function get_random_seats(){
-            result = new Array(47).fill(0);
-            for(var i = 0; i < result.length; i++){
-                result[i] = i+1;
-            }
-            result = randArr(result);
-            result = result.concat(result[42])
-            result[42] = 48;
-            return result;
+            groups = randArr([0,1,2,3,4,5,6,7,8]);
+            <!--for(var find_groop=0;find_groop<9;find_groop++)-->
+            <!--{-->
+                <!--if(groups[find_groop]==0)-->
+                <!--{-->
+                    <!--times[find_groop] = times[find_groop] + 1;-->
+                <!--}-->
+            <!--}-->
+            <!--console.log(times);-->
+            <!--console.log(groups);-->
+
+            result = new Array(54).fill(0);
+
+            for (var group=0; group<groups.length; group++) {
+                team_member[group] = randArr(team_member[group]);
+                for (var i=0; i<6; i++) {
+                    result[~~team_seats[group][i]] = ~~team_member[groups[group]][i];
+                };
+            };
+            return result.concat([56,56]);
 
         }
+
+        function isInArray(arr,value){
+            for(var i = 0; i < arr.length; i++){
+                if(value === arr[i]){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        <!--function debug()-->
+        <!--{-->
+
+            <!--console.log(times);-->
+            <!--var arr  = [24, 23, 40, 52, 11, 12];-->
+            <!--var allTd = document.getElementsByClassName("stu");-->
+            <!--for(var k = 0; k < seats.length; k++){-->
+            <!--var test=0;-->
+                <!--for(var j = 0; j < arr.length; j++){-->
+                    <!--if(seats[k] == arr[j]){-->
+                        <!--test = 1;-->
+                    <!--}-->
+                <!--}-->
+                <!--if(test==1){-->
+                    <!--allTd[allTd.length-k-1].className = "tdBg stu";-->
+                <!--}-->
+                <!--else{-->
+                    <!--allTd[allTd.length-k-1].className = "stu";-->
+                <!--}-->
+            <!--}-->
+        <!--}-->
 
 		function start(){
 		    if (started==0){
                 started = 1;
-
                 timer = setInterval(function(){
                     seats = get_random_seats();
 
                     <!--debug();-->
+
                     var allTd = document.getElementsByClassName("stu");
                     for (var i=0; i<allTd.length; i++) {
                         allTd[allTd.length-i-1].innerText = names[seats[i]];
@@ -161,30 +227,19 @@
 	<!-- table是表格标签，tr表示一行，td表示一行中的一个单元格 -->
 	<!-- 默认情况，单元格会根据内容的长度比例来自动设置 -->
     <center>
-        <h1>18班座位安排！</h1>
+        <h1>6班座位安排！</h1>
         <table border="1" width="1000" class="main_table">
             <tr>
             <!-- 可以对单元格施加宽度属性，使用百分比和长度皆可 -->
                 <td class="stu"></td>
                 <td class="stu"></td>
-                <td rowspan="6">走<br>廊</td>
+                <td rowspan="7">走<br>廊</td>
                 <td class="stu"></td>
                 <td class="stu"></td>
-                <td rowspan="6">走<br>廊</td>
+                <td rowspan="7">走<br>廊</td>
                 <td class="stu"></td>
                 <td class="stu"></td>
-                <td rowspan="6">走<br>廊</td>
-                <td class="stu"></td>
-                <td class="stu"></td>
-            </tr>
-
-            <tr>
-                <td class="stu"></td>
-                <td class="stu"></td>
-                <td class="stu"></td>
-                <td class="stu"></td>
-                <td class="stu"></td>
-                <td class="stu"></td>
+                <td rowspan="7">走<br>廊</td>
                 <td class="stu"></td>
                 <td class="stu"></td>
             </tr>
@@ -233,7 +288,27 @@
                 <td class="stu"></td>
             </tr>
 
+            <tr>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+            </tr>
 
+            <tr>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+            </tr>
 
             <tr>
                 <!-- colspan 可以跨列 -->
