@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>CLASS-18 随机座位安排</title>
+	<title>CLASS-6 随机座位安排</title>
 	<style>
 		td {
 			width: 9.09%;
@@ -31,10 +31,16 @@
             border: none;
         }
         body{
+            /* 加载背景图片 */
             background-image: url("bg.png");
+
+            /* 背景图垂直、水平均居中 */
             background-position: center center;
+            /* 背景图不平铺 */
             background-repeat: no-repeat;
-            background-attachment: fixed;
+            /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
+            background-attachment: fixed;  /*此条属性必须设置否则可能无效*/
+            /* 让背景图基于容器大小伸缩 */
             background-size: cover;
 			}
 	</style>
@@ -48,6 +54,10 @@
 
 	    var timer;
 	    var started=0;
+
+
+	    //var times = [0,0,0,0,0,0,0,0,0];
+
 
 	    var names = {1: '陈俊宇', 2: '陈铭隽', 3: '陈奕纶', 4: '崔茗扬', 5: '段明昊', 6: '冯梓健', 7: '郭祉舆', 8: '黄本坤', 9: '黄  昊', 10: '黄炜钊', 11: '黄钊华', 12: '江晓峰', 13: '雷颜玮', 14: '李国恒', 15: '李  可', 16: '李元星', 17: '李卓涛', 18: '李宗轩', 19: '练浩诚', 20: '梁俊文', 21: '梁宇轩', 22: '林子尧', 23: '刘嘉俊', 24: '宋亦非', 25: '谭钧钰', 26: '唐宏凯', 27: '王子扬', 28: '韦睿行', 29: '吴嘉浩', 30: '冼飘虹', 31: '许  航', 32: '叶孝轩', 33: '叶宇桐', 34: '郑  超', 35: '钟梓洋', 36: '周蒋麟', 37: '邹佳洵', 38: '曾子晴', 39: '陈楚原', 40: '陈沛怡', 41: '梁楚清', 42: '罗思薇', 43: '谢砚琪', 44: '詹  岚', 45: '周熙临', 46: '邹梓晴', 47: '邱童', 48: ''};
 
@@ -67,11 +77,10 @@
             girls = randArr([38, 39, 40, 41, 42, 43, 44, 45, 46, 47]);
 
             // 0是男1是女 0.5男生单桌
-            seat_sex = [1,0,1,0, 0,1,0,1, 0,0,1,0, 0,0,0,0, 0,0,0,0, 0,0.5,0,0];
+            seat_sex = randArr(Array(18).fill(0).concat(Array(5).fill(1)).concat([0.5]));
             while(seat_sex.length>0)
             {
-                sex = seat_sex.shift();//pop出来的是第一个
-                console.log(sex);
+                sex = seat_sex.pop();
                 if (sex==0){
                     result = result.concat([boys.pop(), boys.pop()]);
                 }
@@ -79,10 +88,14 @@
                     result = result.concat([girls.pop(), girls.pop()]);
                 }
                 if (sex==0.5){
-                    result = result.concat([boys.pop(), 48]);
+                    result = result.concat([boys.pop()]);
                 }
+
             }
+            result = result.concat(result[42])
+            result[42] = 48;
             return result;
+
         }
 
 		function start(){
@@ -91,10 +104,12 @@
 
                 timer = setInterval(function(){
                     seats = get_random_seats();
-                    for (var i=0; i<48; i++) {
-                        document.getElementById(String(i+1)).innerText = names[seats[i]];
-                    }
 
+                    <!--debug();-->
+                    var allTd = document.getElementsByClassName("stu");
+                    for (var i=0; i<allTd.length; i++) {
+                        allTd[allTd.length-i-1].innerText = names[seats[i]];
+                    }
 
                 }, 50);
             }
@@ -109,6 +124,7 @@
 		}
 
 		function download(){
+
             var oHtml = document.getElementsByClassName('main_table')[0].outerHTML;
             var excelHtml = `
                 <html>
@@ -133,11 +149,17 @@
                     </body>
                 </html>
             `;
+             // 生成xls文件并通过a标签下载到本地
+
+             // 生成Excel
              var excelBlob = new Blob([excelHtml], {
                type: 'application/vnd.ms-excel'
              })
+
+
             var oA = document.createElement('a');
             var ls = URL.createObjectURL(excelBlob);
+            // 利用URL.createObjectURL()方法为a元素生成blob URL
 
             oA.href = ls;
             oA.download = '座位表.xls';
@@ -147,81 +169,96 @@
                 document.getElementById('insert').removeChild(document.getElementById('insert').childNodes[0]);
             }
             document.getElementById('insert').append(oA);
+
 		}
+
 
 	</script>
 </head>
 <body>
+
+	<!-- table是表格标签，tr表示一行，td表示一行中的一个单元格 -->
+	<!-- 默认情况，单元格会根据内容的长度比例来自动设置 -->
     <center>
         <h1>18班座位安排！</h1>
         <table border="1" width="1000" class="main_table">
             <tr>
             <!-- 可以对单元格施加宽度属性，使用百分比和长度皆可 -->
-                <td class="stu" id="48"></td>
-                <td class="stu" id="47"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
                 <td rowspan="6">走<br>廊</td>
-                <td class="stu" id="46"></td>
-                <td class="stu" id="45"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
                 <td rowspan="6">走<br>廊</td>
-                <td class="stu" id="44"></td>
-                <td class="stu" id="43"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
                 <td rowspan="6">走<br>廊</td>
-                <td class="stu" id="42"></td>
-                <td class="stu" id="41"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
             </tr>
+
             <tr>
-                <td class="stu" id="40"></td>
-                <td class="stu" id="39"></td>
-                <td class="stu" id="38"></td>
-                <td class="stu" id="37"></td>
-                <td class="stu" id="36"></td>
-                <td class="stu" id="35"></td>
-                <td class="stu" id="34"></td>
-                <td class="stu" id="33"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
             </tr>
+
             <tr>
-                <td class="stu" id="32"></td>
-                <td class="stu" id="31"></td>
-                <td class="stu" id="30"></td>
-                <td class="stu" id="29"></td>
-                <td class="stu" id="28"></td>
-                <td class="stu" id="27"></td>
-                <td class="stu" id="26"></td>
-                <td class="stu" id="25"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
             </tr>
+
             <tr>
-                <td class="stu" id="24"></td>
-                <td class="stu" id="23"></td>
-                <td class="stu" id="22"></td>
-                <td class="stu" id="21"></td>
-                <td class="stu" id="20"></td>
-                <td class="stu" id="19"></td>
-                <td class="stu" id="18"></td>
-                <td class="stu" id="17"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
             </tr>
+
             <tr>
-                <td class="stu" id="16"></td>
-                <td class="stu" id="15"></td>
-                <td class="stu" id="14"></td>
-                <td class="stu" id="13"></td>
-                <td class="stu" id="12"></td>
-                <td class="stu" id="11"></td>
-                <td class="stu" id="10"></td>
-                <td class="stu" id="9"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
             </tr>
+
             <tr>
-                <td class="stu" id="8"></td>
-                <td class="stu" id="7"></td>
-                <td class="stu" id="6"></td>
-                <td class="stu" id="5"></td>
-                <td class="stu" id="4"></td>
-                <td class="stu" id="3"></td>
-                <td class="stu" id="2"></td>
-                <td class="stu" id="1"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
+                <td class="stu"></td>
             </tr>
+
+
+
             <tr>
+                <!-- colspan 可以跨列 -->
                 <td colspan="11">讲台</td>
             </tr>
+
         </table>
 
         <br><br>

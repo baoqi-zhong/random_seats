@@ -1,4 +1,4 @@
-# 6班座位安排 \﻿ (•◡•) /
+# 18班座位安排 \﻿ (•◡•) /
 
 [![Author_page](https://img.shields.io/badge/Author%20page-on%20bilibili-green)](https://space.bilibili.com/290472819)
 
@@ -79,6 +79,9 @@
     
     version 5.1  -2021.2.14
     男女同桌调整
+    
+    version 5.2  -2021.3.28
+    女生座位调整.女生将不会抽到靠后的位置
 
 
 ## 关于代码使用的相关声明
