@@ -4,9 +4,8 @@
 
 基于python、js的座位安排程序
 > 偷偷说一声18班牛啤 (>▽<)
-##  添加了网页版 \﻿ (•◡•) /   https://baoqi.js.org/random_seats
 
-# 致歉
+## BUG fix
 ### 在前三个版本的random_seats中，使用了array内置的sort()函数，传入随机数进行打乱。
   `array.sort(() => {return Math.round(Math.random()) - 0.5});`
 
